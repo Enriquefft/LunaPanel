@@ -132,8 +132,9 @@
 				if (data.status === '200') {
 					newEvent = emptyEvent;
 					location.reload();
+				} else {
+					throw new Error(data.body);
 				}
-				throw new Error(data.body);
 			})
 			.catch((err) => {
 				removeEvent(inserted[0].name, inserted[0].id, true);

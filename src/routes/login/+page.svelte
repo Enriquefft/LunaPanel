@@ -7,15 +7,14 @@
 	let password: string;
 
 	const handleSignIn = async () => {
-
-    const { error } = await supabase.auth.signInWithPassword({
+		const { error } = await supabase.auth.signInWithPassword({
 			email,
 			password
 		});
 
-    alert(error?.message || "Success!")
+		alert(error?.message || 'Success!');
+		location.reload();
 	};
-
 </script>
 
 <form on:submit={handleSignIn}>
