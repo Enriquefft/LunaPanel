@@ -59,8 +59,11 @@
 	};
 
 	// const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
-	const removeEvent = async (Name: string, id: number) => {
-		if (!confirm(`Are you sure you want to delete event ${Name}?\nThis action cannot be undone`)) {
+	const removeEvent = async (Name: string, id: number, force: boolean) => {
+		if (
+			!force &&
+			!confirm(`Are you sure you want to delete event ${Name}?\nThis action cannot be undone`)
+		) {
 			return;
 		}
 
@@ -69,6 +72,9 @@
 		if (error) {
 			alert(error.message);
 		} else {
+			if (force) {
+				return;
+			}
 			alert('Event deleted successfully');
 			location.reload();
 		}
@@ -130,7 +136,7 @@
 				throw new Error(data.body);
 			})
 			.catch((err) => {
-				removeEvent(inserted[0].name, inserted[0].id);
+				removeEvent(inserted[0].name, inserted[0].id, true);
 				alert(err.message);
 			});
 	};
