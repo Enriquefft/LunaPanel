@@ -30,7 +30,7 @@
 		startTime: '12:00',
 		endTime: '13:05',
 		weekDays: [1],
-		userName: currentUser.first_name + currentUser.last_name,
+		userName: currentUser.first_name + ' ' + currentUser.last_name,
 		userPhone: '51' + currentUser.phone_number
 	};
 	let newEvent: Event = emptyEvent;
@@ -95,14 +95,17 @@
 			return;
 		}
 
-		const { error } = await supabase.from('Events').insert({
-			user_id: user_id,
-			name: newEvent.name,
-			description: newEvent.description,
-			start: newEvent.startTime,
-			end: newEvent.endTime,
-			week_days: newEvent.weekDays
-		});
+		const { data: inserted, error } = await supabase
+			.from('Events')
+			.insert({
+				user_id: user_id,
+				name: newEvent.name,
+				description: newEvent.description,
+				start: newEvent.startTime,
+				end: newEvent.endTime,
+				week_days: newEvent.weekDays
+			})
+			.select();
 
 		if (error) {
 			alert(error.message);
@@ -114,20 +117,20 @@
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ newEvent, user_id })
+			body: JSON.stringify({ newEvent })
 		})
 			.then((res) => {
-				console.log('loc_res', res);
 				return res.json();
 			})
 			.then((data) => {
-				if (data.statusCode == '200') {
+				if (data.status === '200') {
 					newEvent = emptyEvent;
 					location.reload();
 				}
-				throw new Error(data.message);
+				throw new Error(data.body);
 			})
 			.catch((err) => {
+				removeEvent(inserted[0].name, inserted[0].id);
 				alert(err.message);
 			});
 	};
@@ -160,7 +163,7 @@
 	</table>
 {/if}
 
-<h3>Add User:</h3>
+<h3>Add Reminder:</h3>
 <form on:submit|preventDefault={addEvent}>
 	<!-- <input bind:value={newEvent.category} id="category" type="text" placeholder="Eat" required /> -->
 	<!-- <label for="category">Category:</label> -->

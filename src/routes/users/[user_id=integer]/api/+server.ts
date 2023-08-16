@@ -1,6 +1,3 @@
-import { json } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
-
 export async function POST({ request }: any) {
 	const { newEvent } = await request.json();
 
@@ -15,5 +12,20 @@ export async function POST({ request }: any) {
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify(newEvent)
-	});
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			console.log(data);
+			if (data.statusCode === 200) {
+				console.log('Event created successfully!');
+				return new Response(JSON.stringify({ status: 200, body: data.body }));
+			} else {
+				console.log('Error creating event!');
+				return new Response(JSON.stringify({ status: 500, body: data.errorMessage }));
+			}
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+			return new Response(JSON.stringify({ status: 500, body: error }));
+		});
 }
