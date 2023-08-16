@@ -31,7 +31,7 @@
 		endTime: '13:05',
 		weekDays: [1],
 		userName: currentUser.last_name,
-		userPhone: currentUser.phone_number
+		userPhone: '51' + currentUser.phone_number
 	};
 	let newEvent: Event = emptyEvent;
 
