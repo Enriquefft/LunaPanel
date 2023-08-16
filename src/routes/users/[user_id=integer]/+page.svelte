@@ -30,7 +30,7 @@
 		startTime: '12:00',
 		endTime: '13:05',
 		weekDays: [1],
-		userName: currentUser.last_name,
+		userName: currentUser.first_name + currentUser.last_name,
 		userPhone: '51' + currentUser.phone_number
 	};
 	let newEvent: Event = emptyEvent;
