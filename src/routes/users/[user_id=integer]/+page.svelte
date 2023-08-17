@@ -84,8 +84,6 @@
 		// Data validation
 		// all inputs are required
 
-		console.log('newEvent', newEvent);
-
 		if (
 			!newEvent.name ||
 			!newEvent.startTime ||
@@ -129,7 +127,12 @@
 				return res.json();
 			})
 			.then((data) => {
-				if (data.status === '200') {
+				console.log(data);
+
+				if (data.status === 200) {
+					console.log('client success');
+
+					console.log(data.body);
 					newEvent = emptyEvent;
 					location.reload();
 				} else {
